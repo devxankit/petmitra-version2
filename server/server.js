@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 5000;
 
 // CORS Configuration (Restrict to Your Frontend)
 app.use(cors({
-  origin: "https://petmitra-version2.onrender.com", // Replace with actual frontend URL
+  origin: ["https://petmitra-version2.onrender.com", "https://petmitra.vercel.app"],
   credentials: true
 }));
 
