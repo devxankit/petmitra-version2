@@ -64,7 +64,7 @@ const HelpDesk = forwardRef((props, ref) => {
     setLoading(true);
 
     const reportData = {
-      images, // These will be base64 strings that will be uploaded to Cloudinary on the server
+      images, // These will be base64 strings that will be stored directly in MongoDB
       description,
       issue,
       urgency,

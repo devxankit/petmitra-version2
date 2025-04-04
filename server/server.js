@@ -8,7 +8,6 @@ import reportRoutes from "./routes/reportRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import Report from "./models/Report.js";
 import fetch from "node-fetch"; // Keep server active
-import { uploadMultipleImagesToCloudinary } from "./utils/cloudinary.js";
 
 dotenv.config();
 
@@ -50,11 +49,9 @@ app.post("/api/reports", async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    // Upload images to Cloudinary
-    const imageUrls = await uploadMultipleImagesToCloudinary(images);
-
+    // Store base64 images directly in MongoDB
     const newReport = new Report({ 
-      images: imageUrls, 
+      images, // Store base64 images directly in MongoDB
       description, 
       issue, 
       urgency, 

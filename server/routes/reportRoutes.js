@@ -3,7 +3,6 @@ import Report from "../models/Report.js";
 import { fileURLToPath } from "url";
 import { sendEmailNotification } from "../utils/mailer.js";
 import User from "../models/User.js"; // Import the User model to fetch registered users
-import { uploadMultipleImagesToCloudinary } from "../utils/cloudinary.js";
 import path from "path";
 
 const router = express.Router();
@@ -40,20 +39,17 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ message: "Location is required" });
     }
 
-    // Upload images to Cloudinary
-    const imageUrls = await uploadMultipleImagesToCloudinary(images);
-
     // Get the next case number
     const caseNumber = await getNextCaseNumber();
 
-    // Create a new report
+    // Create a new report with base64 images stored directly in MongoDB
     const newReport = new Report({
       caseNumber,
       issue,
       description,
       urgency,
       location,
-      images: imageUrls,
+      images, // Store base64 images directly in MongoDB
     });
 
     await newReport.save();

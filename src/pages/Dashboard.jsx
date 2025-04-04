@@ -121,7 +121,7 @@ const Dashboard = () => {
                 >
                   <div className="relative h-48">
                     <img
-                      src={case_.images?.[0] || '/api/placeholder/300/200'}
+                      src={case_.images?.[0] || '/placeholder-image.jpg'}
                       alt={`Case ${case_._id}`}
                       className="w-full h-full object-cover"
                     />
