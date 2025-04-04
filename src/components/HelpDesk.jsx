@@ -64,18 +64,18 @@ const HelpDesk = forwardRef((props, ref) => {
     setLoading(true);
 
     const reportData = {
-      images, // Matches the backend schema
-      description, // Matches the backend schema
-      issue, // Matches the backend schema
-      urgency, // Matches the backend schema
-      location, // Matches the backend schema
+      images, // These will be base64 strings that will be uploaded to Cloudinary on the server
+      description,
+      issue,
+      urgency,
+      location,
     };
 
     // Debugging: Log the reportData object
     console.log("Report Data:", reportData);
 
     try {
-      const response = await fetch("http://localhost:5000/api/reports", {
+      const response = await fetch("https://petmitra-version2.onrender.com/api/reports", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reportData),
@@ -83,18 +83,18 @@ const HelpDesk = forwardRef((props, ref) => {
 
       if (response.ok) {
         alert("Report submitted successfully!");
-        setImages([]); // Updated field name
-        setDescription(""); // Updated field name
-        setIssue(""); // Reset issue field
+        setImages([]);
+        setDescription("");
+        setIssue("");
         setUrgency("not urgent");
-        setLocation(""); // Updated field name
+        setLocation("");
       } else {
         const errorData = await response.json();
-        console.error("Error Response:", errorData); // Debugging: Log the error response
+        console.error("Error Response:", errorData);
         alert(`Failed to submit report: ${errorData.message}`);
       }
     } catch (error) {
-      console.error("Error submitting report:", error); // Debugging: Log the error
+      console.error("Error submitting report:", error);
       alert("Error submitting report.");
     } finally {
       setLoading(false);

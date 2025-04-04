@@ -6,61 +6,59 @@ import petsRoutes from "./routes/pets.js";
 import adoptionsRoutes from "./routes/adoptions.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
-import Report from "./models/Report.js"; // Import the Report model
+import Report from "./models/Report.js";
+import fetch from "node-fetch"; // Keep server active
+import { uploadMultipleImagesToCloudinary } from "./utils/cloudinary.js";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(express.json({ limit: "10mb" })); // Parse JSON requests
-app.use(cors());
+// CORS Configuration (Restrict to Your Frontend)
+app.use(cors({
+  origin: "https://petmitra-version2.onrender.com", // Replace with actual frontend URL
+  credentials: true
+}));
 
-// Use routes
+app.use(express.json({ limit: "10mb" }));
+
+// API Routes
 app.use('/api/pets', petsRoutes);
 app.use('/api/adoptions', adoptionsRoutes);
 app.use('/api/reports', reportRoutes);
 app.use("/api/auth", authRoutes);
 
 // MongoDB Connection
-const mongoURI = process.env.MONGO_URI || "mongodb://localhost:27017/Petmitra";
+const mongoURI = process.env.MONGO_URI;
+if (!mongoURI) {
+  console.error("❌ MONGO_URI is missing in .env");
+  process.exit(1);
+}
 
-mongoose
-  .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("Connected to PetMitra Database"))
-  .catch((err) => console.error("Database connection error:", err));
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ Database connection error:", err));
 
 // API to handle report submissions
 app.post("/api/reports", async (req, res) => {
   try {
     const { images, description, issue, urgency, location } = req.body;
-
-    // Debugging: Log the incoming request body
-    console.log("Incoming Report Data:", req.body);
-
-    // Validate request body
-    if (!images || images.length === 0) {
-      return res.status(400).json({ error: "Images are required" });
-    }
-    if (!description) {
-      return res.status(400).json({ error: "Problem description is required" });
-    }
-    if (!issue) {
-      return res.status(400).json({ error: "Issue type is required" });
-    }
-    if (!urgency) {
-      return res.status(400).json({ error: "Urgency level is required" });
-    }
-    if (!location) {
-      return res.status(400).json({ error: "Location is required" });
+    if (!images?.length || !description || !issue || !urgency || !location) {
+      return res.status(400).json({ error: "All fields are required" });
     }
 
-    const newReport = new Report({
-      images,
-      description,
-      issue,
-      urgency,
-      location,
+    // Upload images to Cloudinary
+    const imageUrls = await uploadMultipleImagesToCloudinary(images);
+
+    const newReport = new Report({ 
+      images: imageUrls, 
+      description, 
+      issue, 
+      urgency, 
+      location 
     });
     await newReport.save();
     res.status(201).json({ message: "Report submitted successfully!" });
@@ -86,5 +84,12 @@ app.get("/", (req, res) => {
   res.send("Welcome to PetMitra API");
 });
 
+// Keep Server Alive (Prevent Cold Start)
+setInterval(() => {
+  fetch("https://petmitra-version2.onrender.com")
+    .then(() => console.log("Keep-alive request sent"))
+    .catch(err => console.error("Keep-alive request failed:", err));
+}, 10 * 60 * 1000); // Every 10 minutes
+
 // Start Server
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

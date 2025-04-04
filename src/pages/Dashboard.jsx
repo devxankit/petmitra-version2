@@ -16,7 +16,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchCases = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/reports'); // Update API URL
+        const response = await fetch('https://petmitra-version2.onrender.com/api/reports'); // Update API URL
         if (!response.ok) throw new Error('Failed to fetch data');
         const data = await response.json();
         setCases(data || []); // Ensure data is an array
