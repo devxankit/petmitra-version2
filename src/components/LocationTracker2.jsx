@@ -214,7 +214,7 @@ const LocationTracker2 = () => {
   }, [userLocation, mapVisible, nearbyHospitals]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-auto bg-gray-50">
       <div className="w-full max-w-6xl mx-auto px-4 py-6">
         <div className="bg-white rounded-xl shadow-lg p-6">
           <div className="flex flex-col items-center">

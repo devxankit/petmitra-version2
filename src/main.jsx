@@ -9,6 +9,7 @@ import Contact from './pages/Contact.jsx';
 import Login from './pages/Login.jsx';
 import ProtectedRoute from './ProtectedRoute';
 import { AuthProvider } from './AuthContext.jsx'; // Import AuthProvider
+import MobileBottomNav from './components/MobileBottomNav.jsx';
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -22,5 +23,6 @@ createRoot(document.getElementById('root')).render(
         <Route path="/login" element={<Login />} />
       </Routes>
     </AuthProvider>
+    <MobileBottomNav />
   </BrowserRouter>
 );
