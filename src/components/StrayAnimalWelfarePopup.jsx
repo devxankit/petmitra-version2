@@ -68,7 +68,7 @@ const StrayAnimalWelfarePopup = () => {
 
           <button
             onClick={() => {
-              alert("Button clicked! Link this to your 'Learn More' or 'Donate' page.");
+              alert("Button clicked!");
               handleClose();
             }}
             className="w-full rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-6 py-3 text-lg font-semibold text-white shadow-lg transition duration-300 ease-in-out hover:scale-105 hover:from-orange-600 hover:to-red-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"

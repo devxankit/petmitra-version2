@@ -66,7 +66,7 @@ const ChatBot2 = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-[80px] right-4 z-50 md:bottom-6">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition-all"
