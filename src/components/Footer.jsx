@@ -4,8 +4,8 @@ function Footer() {
   return (
     
 
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-4">
+      <footer className="bg-gray-800 text-white py-8 md:pb-0">
+        <div className="container mx-auto px-4 pb-12">
           <div className="grid md:grid-cols-3 gap-8">
             {/* Contact Info */}
             <div>

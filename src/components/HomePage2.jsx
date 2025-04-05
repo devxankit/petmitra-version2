@@ -5,6 +5,7 @@ import HelpDesk from './HelpDesk'; // <-- Make sure HelpDesk uses forwardRef (se
 import LocationTracker2 from './LocationTracker2';
 import ChatBot2 from './Chatbot2';
 import NavBar from './NavBar';
+import CampaignBanner from './CampaignBanner';
 
 const HomePage2 = () => {
     const helpDeskRef = useRef(null);
@@ -81,6 +82,7 @@ const HomePage2 = () => {
             </div> {/* End Top Section */}
 
             {/* Other Sections */}
+            <CampaignBanner />
             <MovingCards />
 
             {/* The HelpDesk component where the ref is attached */}

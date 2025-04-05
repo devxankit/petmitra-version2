@@ -10,12 +10,14 @@ import Login from './pages/Login.jsx';
 import ProtectedRoute from './ProtectedRoute';
 import { AuthProvider } from './AuthContext.jsx'; // Import AuthProvider
 import MobileBottomNav from './components/MobileBottomNav.jsx';
+import HomePage2 from './components/HomePage2.jsx';
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <AuthProvider>
       <Routes>
         <Route index element={<App />} />
+        <Route path="/home" element={<HomePage2 />} />
         <Route path="/about" element={<About />} />
         <Route path="/adopt" element={<Adopt />} />
         <Route path="/contact" element={<Contact />} />

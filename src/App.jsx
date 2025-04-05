@@ -3,6 +3,7 @@ import React from 'react'
 // import NavBar from './components/NavBar'
 import Footer from './components/Footer'
 import HomePage2 from './components/HomePage2'
+import StrayAnimalWelfarePopup from './components/StrayAnimalWelfarePopup'
 // import MobileBottomNav from './components/MobileBottomNav'
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <HomePage2 />
       <Footer />
       {/* <MobileBottomNav/> */}
+      <StrayAnimalWelfarePopup />
     
     </div>
   )
