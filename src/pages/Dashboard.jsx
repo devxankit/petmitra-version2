@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Footer from '../components/Footer';
 import NavBar from '../components/NavBar';
+import LocationTracker2 from '../components/LocationTracker2'; // Import the LocationTracker2 component
 
 const Dashboard = () => {
   const [cases, setCases] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedCase, setSelectedCase] = useState(null); // For the popup/modal
+  const [showPopup, setShowPopup] = useState(false); // To toggle the popup/modal
 
   // Filter states
   const [urgencyFilter, setUrgencyFilter] = useState('all');
@@ -59,8 +62,30 @@ const Dashboard = () => {
   // Status badge styles
   const statusStyles = {
     pending: 'bg-orange-100 text-orange-800',
-    'in-progress': 'bg-blue-100 text-blue-800',
-    resolved: 'bg-green-100 text-green-800',
+    addressed: 'bg-green-100 text-green-800',
+  };
+
+  // Handle status update
+  const handleStatusUpdate = (caseId, newStatus, userName) => {
+    setCases((prevCases) =>
+      prevCases.map((case_) =>
+        case_._id === caseId
+          ? { ...case_, status: newStatus, updatedBy: userName }
+          : case_
+      )
+    );
+  };
+
+  // Handle opening the share popup
+  const handleOpenSharePopup = (case_) => {
+    setSelectedCase(case_);
+    setShowPopup(true);
+  };
+
+  // Handle closing the share popup
+  const handleCloseSharePopup = () => {
+    setSelectedCase(null);
+    setShowPopup(false);
   };
 
   return (
@@ -183,6 +208,30 @@ const Dashboard = () => {
                     <button className="mt-6 w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
                       View Details
                     </button>
+
+                    {/* Status Button */}
+                    <button
+                      className="mt-4 w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700"
+                      onClick={() =>
+                        handleStatusUpdate(
+                          case_._id,
+                          case_.status === 'pending' ? 'addressed' : 'pending',
+                          'Current User' // Replace with actual user name
+                        )
+                      }
+                    >
+                      {case_.status === 'pending'
+                        ? 'Mark as Addressed'
+                        : 'Mark as Pending'}
+                    </button>
+
+                    {/* Share Button */}
+                    <button
+                      className="mt-2 w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700"
+                      onClick={() => handleOpenSharePopup(case_)}
+                    >
+                      Share with Nearest Vet Hospitals
+                    </button>
                   </div>
                 </div>
               ))}
@@ -197,6 +246,23 @@ const Dashboard = () => {
           )}
         </div>
       </div>
+
+      {/* Popup/Modal for Sharing */}
+      {showPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl">
+            <h2 className="text-xl font-bold mb-4">Share Case</h2>
+            <LocationTracker2 /> {/* Render the LocationTracker2 component */}
+            <button
+              className="mt-4 w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700"
+              onClick={handleCloseSharePopup}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </>
   );

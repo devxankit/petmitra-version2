@@ -12,6 +12,7 @@ import { AuthProvider } from './AuthContext.jsx'; // Import AuthProvider
 import MobileBottomNav from './components/MobileBottomNav.jsx';
 import HomePage2 from './components/HomePage2.jsx';
 
+
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <AuthProvider>
