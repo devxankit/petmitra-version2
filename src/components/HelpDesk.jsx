@@ -7,8 +7,10 @@ const HelpDesk = forwardRef((props, ref) => {
   const [urgency, setUrgency] = useState("not urgent");
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
+  const [xname, setName] = useState(""); // New state for name
+  const [phone, setPhone] = useState(""); // New state for phone number
 
-  const apiKey = "R4G5ctQMCOPqzR3WbfrwjQv7FLc8npljpHQTdWdvnEw"; 
+  const apiKey = "R4G5ctQMCOPqzR3WbfrwjQv7FLc8npljpHQTdWdvnEw";
 
   const predefinedIssues = [
     "Injured Animal",
@@ -90,6 +92,14 @@ const HelpDesk = forwardRef((props, ref) => {
   };
 
   const handleSubmitReport = async () => {
+    if (!xname) {
+      alert("Please provide your name.");
+      return;
+    }
+    if (!phone) {
+      alert("Please provide your phone number.");
+      return;
+    }
     if (!images || images.length === 0) {
       alert("Please upload at least one image.");
       return;
@@ -110,6 +120,8 @@ const HelpDesk = forwardRef((props, ref) => {
     setLoading(true);
 
     const reportData = {
+      xname, // Include name in the report
+      phone, // Include phone number in the report
       images,
       description,
       issue,
@@ -128,7 +140,9 @@ const HelpDesk = forwardRef((props, ref) => {
       );
 
       if (response.ok) {
-        alert('Report Submitted Successfully! \n\nThank you for reporting the situation. Our team is reviewing the information, and help will be on the way shortly.\n\nIn the meantime, here are some steps you can take:\n1. Ensure the safety of the animal and anyone nearby.\n2. Keep the animal calm and avoid any sudden movements or loud noises.\n3. Provide first aid if you are trained, and ensure the animal is in a safe, comfortable space.\n4. Keep track of any changes in the animal’s condition and note any key details to share with the responding team.\n\nRest assured, assistance will be there soon. Stay safe, and thank you for your quick action!');
+        alert('Report Submitted Successfully!');
+        setName(""); // Reset name
+        setPhone(""); // Reset phone number
         setImages([]);
         setDescription("");
         setIssue("");
@@ -166,7 +180,16 @@ const HelpDesk = forwardRef((props, ref) => {
             </h2>
             <div className="flex flex-col md:flex-row gap-6">
               <div className="flex-1">
-                <p className="font-semibold mb-2">Upload an Image:</p>
+                <p className="font-semibold mb-2">Your Name:</p>
+                <input
+                  type="text"
+                  className="w-full border border-gray-300 rounded p-2"
+                  placeholder="Enter your name"
+                  value={xname}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                
+                <p className="font-semibold mt-4 mb-2">Upload an Image:</p>
                 <input
                   type="file"
                   accept="image/*"
@@ -199,7 +222,15 @@ const HelpDesk = forwardRef((props, ref) => {
                 />
               </div>
               <div className="flex-1">
-                <p className="font-semibold mb-2">Select an Issue:</p>
+              <p className="font-semibold mt-0 mb-2">Your Phone Number:</p>
+                <input
+                  type="tel"
+                  className="w-full border border-gray-300 rounded p-2"
+                  placeholder="Enter your phone number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+                <p className="font-semibold mt-4 mb-2">Select an Issue:</p>
                 <select
                   className="w-full border border-gray-300 rounded p-2"
                   value={issue}

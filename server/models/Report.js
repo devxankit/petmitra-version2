@@ -31,10 +31,21 @@ const reportSchema = new mongoose.Schema({
     required: [true, "Location is required"],
     maxlength: [200, "Location cannot exceed 200 characters"],
   },
+  xname: {
+    type: String,
+    required: [true, "Name is required"],
+    maxlength: [100, "Name cannot exceed 100 characters"],
+  },
+  phone: {
+    type: String,
+    required: [true, "Phone number is required"],
+    maxlength: [10, "Phone number cannot exceed 1 characters"],
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
+
 });
 
 // Explicitly setting the collection name "reports"

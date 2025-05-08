@@ -47,28 +47,61 @@ const LocationTracker2 = () => {
       const service = platform.getSearchService();
 
       return new Promise((resolve, reject) => {
-        service.discover({
-          at: `${latitude},${longitude}`,
-          q: 'veterinary OR animal hospital OR pet hospital',
-          limit: 20,
-          radius: 5000 // 5km radius
-        }, (result) => {
-          if (result.items) {
-            console.log('Found hospitals:', result.items); // Debug log
-            resolve(result.items);
-          } else {
-            console.log('No hospitals found'); // Debug log
-            resolve([]);
+        service.discover(
+          {
+            at: `${latitude},${longitude}`,
+            q: "veterinary OR animal hospital OR pet hospital",
+            limit: 20,
+            radius: 5000, // 5km radius
+          },
+          (result) => {
+            if (result.items) {
+              const filteredHospitals = result.items.filter((item) => {
+                if (item.position) {
+                  const distance = calculateDistance(
+                    latitude,
+                    longitude,
+                    item.position.lat,
+                    item.position.lng
+                  );
+                  return distance <= 5000; // Distance in meters
+                }
+                return false;
+              });
+              console.log("Filtered hospitals:", filteredHospitals);
+              resolve(filteredHospitals);
+            } else {
+              console.log("No hospitals found");
+              resolve([]);
+            }
+          },
+          (error) => {
+            console.error("Search error:", error);
+            reject(error);
           }
-        }, (error) => {
-          console.error('Search error:', error); // Debug log
-          reject(error);
-        });
+        );
       });
     } catch (error) {
-      console.error('Error in searchNearbyVetHospitals:', error);
+      console.error("Error in searchNearbyVetHospitals:", error);
       return [];
     }
+  };
+
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371e3; // Earth's radius in meters
+    const toRadians = (degrees) => (degrees * Math.PI) / 180;
+
+    const φ1 = toRadians(lat1);
+    const φ2 = toRadians(lat2);
+    const Δφ = toRadians(lat2 - lat1);
+    const Δλ = toRadians(lon2 - lon1);
+
+    const a =
+      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c; // Distance in meters
   };
 
   const getAddressFromCoordinates = async (latitude, longitude) => {

@@ -46,8 +46,8 @@ mongoose.connect(mongoURI, {
 // API to handle report submissions
 app.post("/api/reports", async (req, res) => {
   try {
-    const { images, description, issue, urgency, location } = req.body;
-    if (!images?.length || !description || !issue || !urgency || !location) {
+    const { images, description, issue, urgency, location, xname, phone } = req.body;
+    if (!images?.length || !description || !issue || !urgency || !location || !xname || !phone) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
@@ -57,7 +57,9 @@ app.post("/api/reports", async (req, res) => {
       description, 
       issue, 
       urgency, 
-      location 
+      location,
+      xname,
+      phone,
     });
     await newReport.save();
     res.status(201).json({ message: "Report submitted successfully!" });

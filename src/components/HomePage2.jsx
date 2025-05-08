@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from 'react'; // <-- Import useEffect
-import { useLocation, useNavigate } from 'react-router-dom'; // <-- Import hooks from router
+import React, { useRef, useEffect } from 'react'; 
+import { useLocation, useNavigate } from 'react-router-dom'; 
 import MovingCards from './MovingCards';
-import HelpDesk from './HelpDesk'; // <-- Make sure HelpDesk uses forwardRef (see step 2 below)
+import HelpDesk from './HelpDesk'; 
 import LocationTracker2 from './LocationTracker2';
 import ChatBot2 from './Chatbot2';
 import NavBar from './NavBar';
@@ -9,10 +9,10 @@ import CampaignBanner from './CampaignBanner';
 
 const HomePage2 = () => {
     const helpDeskRef = useRef(null);
-    const location = useLocation(); // <-- Get location object
-    const navigate = useNavigate(); // <-- Get navigate function
+    const location = useLocation(); 
+    const navigate = useNavigate(); 
 
-    // Original function for the internal button (can keep or remove if not needed elsewhere)
+    
     const scrollToHelpDeskInternal = () => {
         console.log("Internal scroll button clicked.");
         helpDeskRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });

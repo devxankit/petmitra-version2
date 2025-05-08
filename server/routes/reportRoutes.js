@@ -20,7 +20,7 @@ const getNextCaseNumber = async () => {
 // Handle form submission
 router.post("/", async (req, res) => {
   try {
-    const { images, issue, description, urgency, location } = req.body;
+    const { images, issue, description, urgency, location, xname, phone } = req.body;
 
     // Validate required fields
     if (!images || images.length === 0) {
@@ -38,6 +38,12 @@ router.post("/", async (req, res) => {
     if (!location) {
       return res.status(400).json({ message: "Location is required" });
     }
+    if (!xname) {
+      return res.status(400).json({ message: "Name is required" });
+    } 
+    if (!phone) {
+      return res.status(400).json({ message: "Phone number is required" });
+    }
 
     // Get the next case number
     const caseNumber = await getNextCaseNumber();
@@ -50,6 +56,8 @@ router.post("/", async (req, res) => {
       urgency,
       location,
       images, // Store base64 images directly in MongoDB
+      xname,
+      phone,
     });
 
     await newReport.save();
@@ -66,6 +74,8 @@ router.post("/", async (req, res) => {
       Issue: ${issue}
       Urgency: ${urgency}
       Location: ${location}
+      Name: ${xname}
+      Phone: ${phone}
 
       Description:
       ${description}
@@ -83,5 +93,7 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: "Error submitting report", error: error.message });
   }
 });
+
+
 
 export default router;

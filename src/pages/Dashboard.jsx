@@ -193,13 +193,14 @@ const Dashboard = () => {
                         </span>
                       </div>
 
+                      {/* Display reporter's name and phone number */}
                       <div className="flex items-start">
                         <div>
-                          <p className="text-sm text-gray-600">
-                            {case_.reporter?.name || 'Unknown Reporter'}
+                          <p className="text-sm text-gray-600 font-semibold">
+                            Reporter Name: {case_.xname || 'Unknown'}
                           </p>
                           <p className="text-sm text-gray-500">
-                            {case_.reporter?.contact || 'No contact info'}
+                            Contact: {case_.phone || 'No contact info'}
                           </p>
                         </div>
                       </div>
@@ -216,7 +217,7 @@ const Dashboard = () => {
                         handleStatusUpdate(
                           case_._id,
                           case_.status === 'pending' ? 'addressed' : 'pending',
-                          'Current User' // Replace with actual user name
+                          'Current User'
                         )
                       }
                     >
